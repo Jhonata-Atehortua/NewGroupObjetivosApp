@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container d-flex flex-column justify-content-center align-items-center text-center mt-5" style="height: 70vh;">
+    <h1 class="mb-4">Panel de Administrador</h1>
+
+    <div class="row w-100 d-flex justify-content-center">
+        <!-- Opción: Capacitaciones -->
+        <div class="col-md-3 mx-2">
+            <a href="{% url 'CapacitacionesAdministrador' %}" class="text-decoration-none">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Capacitaciones</h5>
+                        <p class="card-text">Gestiona capacitaciones blandas y técnicas.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Opción: Usuarios -->
+        <div class="col-md-3 mx-2">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios</h5>
+                    <p class="card-text">Administra los usuarios del sistema.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opción: Reportes -->
+        <div class="col-md-3 mx-2">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Reportes</h5>
+                    <p class="card-text">Consulta reportes de capacitaciones.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opción: Configuración -->
+        <div class="col-md-3 mx-2">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Configuración</h5>
+                    <p class="card-text">Ajusta la configuración del sistema.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
