@@ -1,1 +1,1 @@
-web: PYTHONPATH=. gunicorn app.wsgi:application
+web: PYTHONPATH=. gunicorn --log-level=debug app.wsgi:application
