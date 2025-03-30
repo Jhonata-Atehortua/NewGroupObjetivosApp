@@ -1,5 +1,7 @@
 __pycache__
 env
 .env
+.railwayignore
 db.sqlite3
 staticfiles
+env_objetivos_app
