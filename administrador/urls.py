@@ -13,5 +13,9 @@ urlpatterns = [
     path('Capacitaciones/AgregarCapacitacionTecnica',views.AgregarCapacitacionTecnica,name="AgregarCapacitacionTecnica"),
     path('Capacitaciones/EstructuraMigrar',views.EstructuraMigrarCapacitaciones,name="EstructuraMigrar"),
     path('Capacitaciones/MigrarArchivoCB',views.MigracionCapacionesBlandas,name="MigrarArchivoCB"),
-    path('Capacitaciones/MigrarArchivoCT',views.MigracionCapacionesTecnicas,name="MigrarArchivoCT")
+    path('Capacitaciones/MigrarArchivoCT',views.MigracionCapacionesTecnicas,name="MigrarArchivoCT"),
+    path('Capacitaciones/RegistrosCapacitaciones/<int:idC>',views.RegistroCapacitacion,name='RegistrosCapa'),
+    path('Capacitaciones/ListadoRegistrosCapa/<int:idC>',views.ListadoRegistrosCapa),
+    path('Capacitaciones/AgregarRegistro/<int:idC>',views.AgregarRegistro),
+    path('Capacitaciones/ElimininarRegistro/<int:idR>',views.EliminarRegistroCapa),
 ]

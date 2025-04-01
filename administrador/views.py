@@ -169,4 +169,27 @@ def MigracionCapacionesTecnicas(request):
                 return HttpResponse(f"Error al procesar el CSV: {str(e)}", status=400)
 
         return redirect('CapacitacionesAdministrador') 
-        
+
+@login_required
+def RegistroCapacitacion(request,idC):
+    result = models.User.objects.filter(is_staff=False)
+    return render(request,'Registros.html',{'usuarios':result})
+
+@login_required
+def ListadoRegistrosCapa(request,idC):
+    result = models.Registro.ListadoRegistrosCapa(idC)
+    print(result)
+    return JsonResponse(result,safe=False)
+
+@login_required
+def EliminarRegistroCapa(request,idR):
+    if request.method == "DELETE":
+        models.Registro.EliminarRegistro(idR)
+        return JsonResponse({'Status':"success"},safe=False)
+    
+@login_required
+def AgregarRegistro(request,idC):
+    if request.method == "POST":
+        datos = json.loads(request.body.decode('utf-8'))
+        result = models.Registro.AgregarRegistroManual(idC,datos['usuario'])
+        return JsonResponse(result,safe=False)

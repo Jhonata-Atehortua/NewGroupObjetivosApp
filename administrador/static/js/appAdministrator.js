@@ -66,6 +66,7 @@ function renderizarTabla(capacitaciones, tbody) {
           data-id="${capacitacion.id}">
           Eliminar
         </button>
+        <a href="Capacitaciones/RegistrosCapacitaciones/${capacitacion.id}" class="btn btn-warning btn-sm">Registros</a>
       </td>
     `;
     tbody.appendChild(fila);

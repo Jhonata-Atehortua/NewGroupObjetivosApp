@@ -94,7 +94,8 @@ class Capacitacion(models.Model):
     @classmethod
     def EliminarCapacitacion(cls,idC):
         try:
-            Query = cls.objects.get(id=idC).delete()
+
+            Query = cls.objects.get(id=idC,estado=True).delete()
             return {'status':'susccess','message':'Se elimino la capacitacion'}
         except CategoriaCapacitacion.DoesNotExist:  
             return {'status':'error','message':'No se encontro la capacitacion a eliminar'}
@@ -120,7 +121,7 @@ class Capacitacion(models.Model):
 class Registro(models.Model):
     id = models.AutoField(primary_key=True)
     idUsuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='registros')
-    idCapacitacion = models.ForeignKey(Capacitacion, on_delete=models.CASCADE, related_name='registros')
+    idCapacitacion = models.ForeignKey(Capacitacion, on_delete=models.RESTRICT, related_name='registros')
     fechaRegistro = models.DateField(auto_now_add=True)
     estado = models.BooleanField(default=True)
     evidencia = models.TextField(null=True, blank=True)
@@ -137,14 +138,16 @@ class Registro(models.Model):
             QueryC = cls.objects.select_related('idCapacitacion').filter(idUsuario=user)
             Result = [
                 {
-                    'id_registro' : registro.idCapacitacion.descripcion,
+                    'id_registro' : registro.id,
                     'id' : registro.idCapacitacion.id,
                     'nombre' : registro.idCapacitacion.nombre,
                     'descripcion' : registro.idCapacitacion.descripcion,
                     'fechaInicio' : registro.idCapacitacion.fechaInicio,
                     'fechaFin' : registro.idCapacitacion.fechaFin,
                     'idCategoria' : registro.idCapacitacion.idCategoria.nombre,
-                    'url' : registro.idCapacitacion.url
+                    'url' : registro.idCapacitacion.url,
+                    'estado': registro.estado,
+                    'evidencia':registro.evidencia
                 }
 
                 for registro in QueryC
@@ -168,5 +171,74 @@ class Registro(models.Model):
             cls.objects.bulk_create(registros)
 
             return registros
+        except Registro.DoesNotExist:
+            return cls.objects.none()
+        
+    @classmethod
+    def AgregarRegistroManual(cls,idC,usuario):
+        try:
+            Capa = Capacitacion.objects.get(id=idC)
+            usuario_no_admin = User.objects.get(id=usuario)
+            
+            #validar existencia usuerio en el registro
+            vE = cls.objects.filter(idUsuario=usuario_no_admin,idCapacitacion=Capa).count()
+            print(vE)
+            if vE == 0:
+                registro = cls(idUsuario=usuario_no_admin,idCapacitacion=Capa)
+                registro.save()
+                return {'status':'success','message':'Registro Guardado'}
+            
+            return {'status':'error','message':'El usuerio ya esta registrado '}
+        
+        except Registro.DoesNotExist:
+            return cls.objects.none()
+        
+    @classmethod
+    def InformacionRegistro(cls,idR):
+        try:
+            registro = cls.objects.get(id=idR)
+            return registro
+        except Registro.DoesNotExist:
+            return cls.objects.none()
+    
+    @classmethod
+    def ListadoRegistrosCapa(cls,idC):
+        try:
+            registros = cls.objects.filter(idCapacitacion=idC)
+            Result = [
+                {
+                    'idRegistro' : registro.id,
+                    'usuario' : registro.idUsuario.username,
+                    'estado':registro.estado,
+                    'evidencia':registro.evidencia,
+                }
+
+                for registro in registros
+            ]
+
+            return Result
+        
+        except Registro.DoesNotExist:
+            return cls.objects.none()
+    
+    @classmethod
+    def TerminarRegistro(cls,idR,evidencia):
+        try:
+            registro = cls.objects.get(id=idR)
+            registro.evidencia = evidencia
+            registro.estado = False
+
+            registro.save()
+
+            return registro
+        except Registro.DoesNotExist:
+            return cls.objects.none()
+        
+    @classmethod
+    def EliminarRegistro(cls,idR):
+        try:
+            registro = cls.objects.get(id=idR)
+            registro.delete()
+
         except Registro.DoesNotExist:
             return cls.objects.none()
